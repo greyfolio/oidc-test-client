@@ -7,6 +7,37 @@ function log(message) {
         `[${new Date().toLocaleTimeString()}] ${message}\n`;
 }
 
+function decodeJwtPayload(token) {
+    const parts = token.split(".");
+
+    if (parts.length !== 3) {
+        throw new Error("Access token is not a JWT");
+    }
+
+    const base64Url = parts[1];
+
+    const base64 = base64Url
+        .replace(/-/g, "+")
+        .replace(/_/g, "/")
+        .padEnd(
+            base64Url.length + (4 - base64Url.length % 4) % 4,
+            "="
+        );
+
+    const json = decodeURIComponent(
+        atob(base64)
+            .split("")
+            .map(c =>
+                "%" + c.charCodeAt(0)
+                    .toString(16)
+                    .padStart(2, "0")
+            )
+            .join("")
+    );
+
+    return JSON.parse(json);
+}
+
 async function displayUser() {
     const user = await auth.getUser();
 
@@ -18,6 +49,20 @@ async function displayUser() {
     $("claims").textContent = user
         ? JSON.stringify(user.profile, null, 2)
         : "Not authenticated";
+
+    if (user?.access_token) {
+        try {
+            const claims = decodeJwtPayload(user.access_token);
+
+            $("access-token").textContent =
+                JSON.stringify(claims, null, 2);
+        } catch (error) {
+            $("access-token").textContent =
+                `Could not decode access token: ${error.message}`;
+        }
+    } else {
+        $("access-token").textContent = "Not authenticated";
+    }
 
     $("status").textContent = user
         ? JSON.stringify({
