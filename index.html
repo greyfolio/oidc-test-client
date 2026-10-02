@@ -13,18 +13,30 @@
     <button id="logout">Log out</button>
     <button id="renew">Refresh token</button>
     <button id="copy">Copy access token</button>
+    <button id="show-secret">Analyst</button>
 
-    <h2>Status</h2>
-    <pre id="status"></pre>
+    <table>
+        <tr>
+            <td>
+                <h2>Status</h2>
+                <pre id="status"></pre>
 
-    <h2>ID Token Claims</h2>
-    <pre id="claims"></pre>
+                <h2>ID Token Claims</h2>
+                <pre id="claims"></pre>
 
-    <h2>Access Token</h2>
-    <pre id="access-token"></pre>
+                <h2>Access Token</h2>
+                <pre id="access-token"></pre>
 
-    <h2>Refresh Log</h2>
-    <pre id="log"></pre>
+                <h2>Refresh Log</h2>
+                <pre id="log"></pre>
+            </td>
+            <td>
+                <h2>Analyst Secret</h2>
+                <pre id="analyst-secret"></pre>
+            </td>
+        </tr>
+    </table>
+
 
     <script src="lib/oidc-client-ts.min.js"></script>
     <script src="config.js"></script>
