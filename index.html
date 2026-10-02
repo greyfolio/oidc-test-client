@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OIDC PKCE Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>OIDC PKCE Demo</h1>
+
+    <button id="login">Log in</button>
+    <button id="logout">Log out</button>
+    <button id="renew">Refresh token</button>
+    <button id="copy">Copy access token</button>
+
+    <h2>Status</h2>
+    <pre id="status"></pre>
+
+    <h2>ID Token Claims</h2>
+    <pre id="claims"></pre>
+
+    <h2>Refresh Log</h2>
+    <pre id="log"></pre>
+
+    <script src="lib/oidc-client-ts.min.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
