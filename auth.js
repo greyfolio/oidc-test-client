@@ -2,7 +2,8 @@ window.userManager = new oidc.UserManager({
     ...window.oidcConfig,
 
     userStore: new oidc.WebStorageStateStore({
-        store: window.sessionStorage
+        //store: window.sessionStorage
+        store: window.localStorage
     })
 });
 

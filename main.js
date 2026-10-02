@@ -38,6 +38,31 @@ function decodeJwtPayload(token) {
     return JSON.parse(json);
 }
 
+function getAccessTokenClaims(user) {
+    if (!user?.access_token) {
+        return null;
+    }
+
+    return decodeJwtPayload(user.access_token);
+}
+
+function hasRole(user, requiredRole) {
+    const claims = getAccessTokenClaims(user);
+
+    if (!claims) {
+        return false;
+    }
+
+    /*
+     * Keycloak realm roles normally appear here:
+     *
+     *   realm_access.roles
+     */
+    const roles = claims.roles ?? [];
+
+    return roles.includes(requiredRole);
+}
+
 async function displayUser() {
     const user = await auth.getUser();
 
@@ -104,6 +129,29 @@ $("copy").onclick = async () => {
         log("Access token copied.");
     }
 };
+
+$("show-secret").onclick = async () => {
+    const user = await auth.getUser();
+
+    if (!user || user.expired) {
+        $("analyst-secret").textContent =
+            "ACCESS DENIED: You are not logged in.";
+        return;
+    }
+
+    if (!hasRole(user, "analyst")) {
+        $("analyst-secret").textContent =
+            "ACCESS DENIED: The analyst role is required.";
+        return;
+    }
+
+    $("analyst-secret").textContent =
+        "SECRET ANALYST MESSAGE:\n\n" +
+        "Quarterly projections indicate that the " +
+        "coffee machine on Floor 3 accounts for 73% " +
+        "of organizational productivity.";
+};
+
 
 async function initialize() {
     // Handle the redirect from Keycloak.
